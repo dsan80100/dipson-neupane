@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import emailjs from '@emailjs/browser'
 import './Contact.css'
 
 function Contact() {
+  const form = useRef()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: ''
   })
+  const [isLoading, setIsLoading] = useState(false)
+  const [status, setStatus] = useState('')
 
   const handleChange = (e) => {
     setFormData({
@@ -18,8 +22,27 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    alert('Thank you for your message! I will get back to you soon.')
-    setFormData({ name: '', email: '', subject: '', message: '' })
+    setIsLoading(true)
+    setStatus('')
+
+    emailjs.sendForm(
+      'YOUR_SERVICE_ID',
+      'YOUR_TEMPLATE_ID',
+      form.current,
+      'YOUR_PUBLIC_KEY'
+    )
+      .then((result) => {
+        console.log('SUCCESS!', result.text)
+        setStatus('success')
+        setFormData({ name: '', email: '', subject: '', message: '' })
+        setIsLoading(false)
+        setTimeout(() => setStatus(''), 3000)
+      }, (error) => {
+        console.log('FAILED...', error.text)
+        setStatus('error')
+        setIsLoading(false)
+        setTimeout(() => setStatus(''), 3000)
+      })
   }
 
   return (
@@ -81,7 +104,18 @@ function Contact() {
             </div>
           </div>
 
-          <form className="contact-form" onSubmit={handleSubmit}>
+          <form ref={form} className="contact-form" onSubmit={handleSubmit}>
+            {status === 'success' && (
+              <div className="status-message success">
+                ✓ Message sent successfully! I'll get back to you soon.
+              </div>
+            )}
+            {status === 'error' && (
+              <div className="status-message error">
+                ✗ Failed to send message. Please try again or email me directly.
+              </div>
+            )}
+            
             <div className="form-group">
               <input
                 type="text"
@@ -90,6 +124,7 @@ function Contact() {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -101,6 +136,7 @@ function Contact() {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -112,6 +148,7 @@ function Contact() {
                 value={formData.subject}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -123,12 +160,22 @@ function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               ></textarea>
             </div>
             
-            <button type="submit" className="submit-btn">
-              Send Message
-              <span className="btn-arrow">→</span>
+            <button type="submit" className="submit-btn" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  Sending...
+                </>
+              ) : (
+                <>
+                  Send Message
+                  <span className="btn-arrow">→</span>
+                </>
+              )}
             </button>
           </form>
         </div>

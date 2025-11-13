@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import Loading from './components/Loading'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import About from './components/About'
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <div className="App">
+      <Loading />
       <Navbar scrolled={scrolled} />
       <Home />
       <About />

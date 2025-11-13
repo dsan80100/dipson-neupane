@@ -151,11 +151,13 @@
 .profile-image {
   width: 100%;
   height: auto;
-  border-radius: 20px;
+  border-radius: 50%;
   position: relative;
   z-index: 2;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: float 3s ease-in-out infinite;
+  aspect-ratio: 1/1;
+  object-fit: cover;
 }
 
 .image-background {
@@ -165,7 +167,7 @@
   right: -20px;
   bottom: -20px;
   background: var(--gradient);
-  border-radius: 20px;
+  border-radius: 50%;
   z-index: 1;
   opacity: 0.3;
 }

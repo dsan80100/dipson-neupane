@@ -5,9 +5,7 @@ function About() {
     { name: 'HTML/CSS', level: 95 },
     { name: 'JavaScript', level: 90 },
     { name: 'React.js', level: 88 },
-    { name: 'Node.js', level: 85 },
-    { name: 'UI/UX Design', level: 92 },
-    { name: 'Python', level: 80 }
+    { name: 'UI/UX Design', level: 92 }
   ]
 
   return (
